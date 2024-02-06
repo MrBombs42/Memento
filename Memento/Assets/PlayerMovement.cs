@@ -40,7 +40,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		// Check if the player is grounded
 		isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
-		Debug.DrawRay(transform.position, Vector3.down, Color.red);
 
 		// Apply movement force
 		Vector3 movement = moveDirection * moveSpeed * Time.fixedDeltaTime;
