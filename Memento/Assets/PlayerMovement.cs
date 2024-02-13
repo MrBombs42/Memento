@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using Assets;
+using Memento;
+using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MementoBehavior
 {
 	public float moveSpeed = 5f; // Movement speed
 	public float jumpForce = 10f; // Jump force
@@ -10,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
 	private Rigidbody rb;
 	private bool isGrounded;
 	private Vector3 moveDirection;
+	private bool _blockedInput;
 
 	void Start()
 	{
@@ -18,6 +21,11 @@ public class PlayerMovement : MonoBehaviour
 
 	void Update()
 	{
+		if (_blockedInput)
+		{
+			return;
+		}
+
 		// Movement input
 		float horizontalInput = Input.GetAxis("Horizontal");
 		float verticalInput = Input.GetAxis("Vertical");
@@ -38,6 +46,11 @@ public class PlayerMovement : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		if (_blockedInput)
+		{
+			return;
+		}
+
 		// Check if the player is grounded
 		isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
 
@@ -52,6 +65,37 @@ public class PlayerMovement : MonoBehaviour
 		if (isGrounded)
 		{
 			rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+		}
+	}
+
+	public override ISnapshot GetSnapshot()
+	{
+		return new MovementSnapshot
+		{
+			XPos = transform.position.x,
+			YPos = transform.position.y,
+			ZPos = transform.position.z
+		};
+	}
+
+	public override void Restore(ISnapshot snapshot)
+	{
+		var memento = (MovementSnapshot)snapshot;
+		transform.position = new Vector3(memento.XPos, memento.YPos, memento.ZPos);
+	}
+
+	public override void OnEnterInState(CaretakerState state)
+	{
+		switch (state)
+		{
+			case CaretakerState.Rewind:
+			case CaretakerState.Replay:
+				_blockedInput = true;
+				break;
+			case CaretakerState.Record:
+			default:
+				_blockedInput = false;
+				break;
 		}
 	}
 }
