@@ -48,7 +48,7 @@ namespace Memento
 					Record();
 					break;
 				case CaretakerState.Rewind:
-
+					Rewind();
 					break;
 				case CaretakerState.Replay:
 					Replay();
@@ -105,6 +105,24 @@ namespace Memento
 			}
 
 			_currentFrame++;
+		}
+
+		private void Rewind()
+		{
+			if (_currentFrame <= 0)
+			{
+				ChangeState(CaretakerState.None);
+				return;
+			}
+
+			_timeline.TryGetValue(_currentFrame, out var frame);
+
+			foreach (var instance in MementableObjects)
+			{
+				instance.Restore(frame.Snapshot);
+			}
+
+			_currentFrame--;
 		}
 	}
 }
