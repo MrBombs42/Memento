@@ -7,16 +7,17 @@ namespace Memento
 	{
 		// Current it will not work for more than one object
 		public List<MementoBehavior> MementableObjects;
+		public CaretakerState CurrentState { get; private set; }
+		public long FrameCount => _frameCount;
 
 		private Dictionary<long, IFrame> _timeline;
-		private CaretakerState _currentState;
 		private long _frameCount;
 		private long _currentFrame;
 
 		private void Awake()
 		{
 			_timeline = new Dictionary<long, IFrame>();
-			_currentState = CaretakerState.None;
+			CurrentState = CaretakerState.None;
 		}
 
 		private void Update()
@@ -42,7 +43,7 @@ namespace Memento
 
 		private void FixedUpdate()
 		{
-			switch (_currentState)
+			switch (CurrentState)
 			{
 				case CaretakerState.Record:
 					Record();
@@ -72,20 +73,20 @@ namespace Memento
 
 		private void ChangeState(CaretakerState state)
 		{
-			_currentState = state;
-			if (_currentState == CaretakerState.Replay)
+			CurrentState = state;
+			if (CurrentState == CaretakerState.Replay)
 			{
 				_currentFrame = 1;
 			}
 
-			if (_currentState == CaretakerState.Rewind)
+			if (CurrentState == CaretakerState.Rewind)
 			{
 				_currentFrame = _frameCount;
 			}
 
 			foreach (var instance in MementableObjects)
 			{
-				instance.OnEnterInState(_currentState);
+				instance.OnEnterInState(CurrentState);
 			}
 		}
 
