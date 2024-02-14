@@ -1,8 +1,10 @@
-﻿namespace Memento
+﻿using System.Collections.Generic;
+
+namespace Memento
 {
 	public interface IFrame
 	{
 		long TimeStamp { get; }
-		ISnapshot Snapshot { get; } // dicionario de Snapshot, key id do objeto
+		Dictionary<long, ISnapshot> Snapshots { get; }
 	}
 }

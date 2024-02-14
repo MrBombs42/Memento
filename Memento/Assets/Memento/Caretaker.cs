@@ -1,8 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Memento
 {
+	public static class MementoId
+	{
+		private static long _idGenerator;
+
+		public static long GetId()
+		{
+			return ++_idGenerator;
+		}
+	}
+
 	public class Caretaker : MonoBehaviour
 	{
 		// Current it will not work for more than one object
@@ -34,7 +45,6 @@ namespace Memento
 			{
 				ChangeState(CaretakerState.Replay);
 			}
-
 			else if (Input.GetKeyDown(KeyCode.Alpha4))
 			{
 				ChangeState(CaretakerState.None);
@@ -62,13 +72,16 @@ namespace Memento
 		private void Record()
 		{
 			_frameCount++;
+			var snapshots = new Dictionary<long, ISnapshot>();
 			foreach (var instance in MementableObjects)
 			{
 				var snapshot = instance.GetSnapshot();
 
-				var frame = new Frame(_frameCount, snapshot);
-				_timeline.Add(_frameCount, frame);
+				snapshots.Add(instance.Id, snapshot);
 			}
+
+			var frame = new Frame(_frameCount, snapshots);
+			_timeline.Add(_frameCount, frame);
 		}
 
 		private void ChangeState(CaretakerState state)
@@ -98,12 +111,7 @@ namespace Memento
 				return;
 			}
 
-			_timeline.TryGetValue(_currentFrame, out var frame);
-
-			foreach (var instance in MementableObjects)
-			{
-				instance.Restore(frame.Snapshot);
-			}
+			RetoreCurrentFrame(_currentFrame);
 
 			_currentFrame++;
 		}
@@ -116,14 +124,20 @@ namespace Memento
 				return;
 			}
 
-			_timeline.TryGetValue(_currentFrame, out var frame);
-
-			foreach (var instance in MementableObjects)
-			{
-				instance.Restore(frame.Snapshot);
-			}
+			RetoreCurrentFrame(_currentFrame);
 
 			_currentFrame--;
+		}
+
+		private void RetoreCurrentFrame(long frameTime)
+		{
+			_timeline.TryGetValue(frameTime, out var frame);
+
+			foreach (var snapshot in frame.Snapshots)
+			{
+				var instance = MementableObjects.First(i => i.Id == snapshot.Key);// TODO change to dictionary
+				instance.Restore(snapshot.Value);
+			}
 		}
 	}
 }

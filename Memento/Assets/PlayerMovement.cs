@@ -72,9 +72,7 @@ public class PlayerMovement : MementoBehavior
 	{
 		return new MovementSnapshot
 		{
-			XPos = transform.position.x,
-			YPos = transform.position.y,
-			ZPos = transform.position.z,
+			Position = transform.position,
 			Rotation = transform.rotation
 		};
 	}
@@ -82,7 +80,7 @@ public class PlayerMovement : MementoBehavior
 	public override void Restore(ISnapshot snapshot)
 	{
 		var memento = (MovementSnapshot)snapshot;
-		transform.position = new Vector3(memento.XPos, memento.YPos, memento.ZPos);
+		transform.position = memento.Position;
 		transform.rotation = memento.Rotation;
 	}
 
