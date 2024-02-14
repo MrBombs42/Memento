@@ -74,7 +74,8 @@ public class PlayerMovement : MementoBehavior
 		{
 			XPos = transform.position.x,
 			YPos = transform.position.y,
-			ZPos = transform.position.z
+			ZPos = transform.position.z,
+			Rotation = transform.rotation
 		};
 	}
 
@@ -82,6 +83,7 @@ public class PlayerMovement : MementoBehavior
 	{
 		var memento = (MovementSnapshot)snapshot;
 		transform.position = new Vector3(memento.XPos, memento.YPos, memento.ZPos);
+		transform.rotation = memento.Rotation;
 	}
 
 	public override void OnEnterInState(CaretakerState state)
