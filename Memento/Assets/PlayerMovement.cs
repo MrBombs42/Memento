@@ -26,18 +26,15 @@ public class PlayerMovement : MementoBehavior
 			return;
 		}
 
-		// Movement input
 		float horizontalInput = Input.GetAxis("Horizontal");
 		float verticalInput = Input.GetAxis("Vertical");
 		moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
-		// Jump input
 		if (Input.GetButtonDown("Jump") && isGrounded)
 		{
 			Jump();
 		}
 
-		// Rotate the player towards the movement direction
 		if (moveDirection != Vector3.zero)
 		{
 			transform.rotation = Quaternion.LookRotation(moveDirection);
@@ -51,17 +48,14 @@ public class PlayerMovement : MementoBehavior
 			return;
 		}
 
-		// Check if the player is grounded
 		isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
 
-		// Apply movement force
 		Vector3 movement = moveDirection * moveSpeed * Time.fixedDeltaTime;
 		rb.MovePosition(rb.position + movement);
 	}
 
 	void Jump()
 	{
-		// Apply jump force if grounded
 		if (isGrounded)
 		{
 			rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);

@@ -16,7 +16,6 @@ namespace Memento
 
 	public class Caretaker : MonoBehaviour
 	{
-		// Current it will not work for more than one object
 		public List<MementoBehavior> MementableObjects;
 		public CaretakerState CurrentState { get; private set; }
 		public long FrameCount => _frameCount;
@@ -111,7 +110,7 @@ namespace Memento
 				return;
 			}
 
-			RetoreCurrentFrame(_currentFrame);
+			RestoreCurrentFrame(_currentFrame);
 
 			_currentFrame++;
 		}
@@ -124,12 +123,12 @@ namespace Memento
 				return;
 			}
 
-			RetoreCurrentFrame(_currentFrame);
+			RestoreCurrentFrame(_currentFrame);
 
 			_currentFrame--;
 		}
 
-		private void RetoreCurrentFrame(long frameTime)
+		private void RestoreCurrentFrame(long frameTime)
 		{
 			_timeline.TryGetValue(frameTime, out var frame);
 
