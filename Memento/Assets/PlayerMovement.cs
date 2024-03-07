@@ -78,6 +78,10 @@ public class PlayerMovement : MementoBehavior
 		transform.rotation = memento.Rotation;
 	}
 
+	public override void Prepare(ISnapshot memento)
+	{
+	}
+
 	public override void OnEnterInState(CaretakerState state)
 	{
 		switch (state)

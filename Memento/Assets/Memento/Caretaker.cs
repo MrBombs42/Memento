@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Memento;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -75,6 +76,11 @@ namespace Memento
 			foreach (var instance in MementableObjects)
 			{
 				var snapshot = instance.GetSnapshot();
+
+				if (snapshot is EmptySnapshot)
+				{
+					continue;
+				}
 
 				snapshots.Add(instance.Id, snapshot);
 			}

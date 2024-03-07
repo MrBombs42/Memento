@@ -19,5 +19,9 @@ namespace Assets
 			transform.position = memento.Position;
 			transform.rotation = memento.Rotation;
 		}
+
+		public override void Prepare(ISnapshot memento)
+		{
+		}
 	}
 }

@@ -8,6 +8,8 @@ namespace Memento
 
 		public abstract ISnapshot GetSnapshot();
 		public abstract void Restore(ISnapshot memento);
+		public abstract void Prepare(ISnapshot memento);
+
 		public virtual void OnEnterInState(CaretakerState state) { }
 
 		protected void Awake()
