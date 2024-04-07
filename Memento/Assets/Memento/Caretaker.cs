@@ -105,6 +105,7 @@ namespace Memento
 			foreach (var instance in MementableObjects)
 			{
 				instance.OnEnterInState(CurrentState);
+				Prepare(instance);
 			}
 		}
 
@@ -132,6 +133,24 @@ namespace Memento
 			RestoreCurrentFrame(_currentFrame);
 
 			_currentFrame--;
+		}
+
+		private void Prepare(MementoBehavior instance)
+		{
+			if (!_timeline.TryGetValue(_currentFrame, out var frame))
+			{
+				return;
+			}
+
+			if (frame.Snapshots.TryGetValue(instance.Id, out var snapshot))
+			{
+				instance.Prepare(snapshot);
+			}
+			else
+			{
+				instance.Prepare(new EmptySnapshot());
+			}
+
 		}
 
 		private void RestoreCurrentFrame(long frameTime)

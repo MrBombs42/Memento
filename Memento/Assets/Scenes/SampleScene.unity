@@ -153,7 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _poll:
-  - {fileID: 7550686579980015700, guid: bb7f39cb101727b459fd7d2a86a8499c, type: 3}
+  - {fileID: 7110327315756229445, guid: bb7f39cb101727b459fd7d2a86a8499c, type: 3}
+  _caretaker: {fileID: 2039006291}
 --- !u!4 &6026810
 Transform:
   m_ObjectHideFlags: 0
@@ -854,7 +855,6 @@ MonoBehaviour:
   MementableObjects:
   - {fileID: 686944989}
   - {fileID: 467922516}
-  - {fileID: 6026809}
 --- !u!4 &2039006292
 Transform:
   m_ObjectHideFlags: 0
